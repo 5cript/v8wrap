@@ -7,16 +7,13 @@
 namespace v8wrap
 {
     /**
-     * A wrapper for a JavaScript class which instantiates it and makes it accessible.
+     * A wrapper for a JavaScript objects and classes.
      */
-    class Class
+    class Object
     {
     public:
-        /**
-         * If you have a class A, pass A here.
-         */
         template <typename... Forwards>
-        Class(v8::Local<v8::Context> context, v8::Local<v8::Value> constructor, Forwards&&... fwds)
+        Object(v8::Local<v8::Context> context, v8::Local<v8::Value> constructor, Forwards&&... fwds)
             : context_{context}
         {
             v8::EscapableHandleScope scope(context_->GetIsolate());
@@ -54,7 +51,7 @@ namespace v8wrap
             v8::TryCatch exc(context_->GetIsolate());
             auto hasMember = object_->Has(context_, funcName);
             if (hasMember.IsNothing() || !hasMember.ToChecked())
-                throw std::invalid_argument("Class does not have member with name '"s + name + "'.");
+                throw std::invalid_argument("Object does not have member with name '"s + name + "'.");
 
             v8::Local<v8::Value> funcAsValue;
             if (auto maybe = object_->Get(context_, funcName); !maybe.ToLocal(&funcAsValue))

@@ -6,7 +6,7 @@ project(minideback)
 
 add_library(
     v8wrap
-    "v8wrap/class.cpp"
+    "v8wrap/object.cpp"
     "v8wrap/cast.cpp"
     "v8wrap/exception.cpp"
 )

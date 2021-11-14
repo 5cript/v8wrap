@@ -1,4 +1,4 @@
-#include <v8wrap/class.hpp>
+#include <v8wrap/object.hpp>
 
 namespace v8wrap
 {
