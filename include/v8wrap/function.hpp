@@ -26,11 +26,18 @@ namespace v8wrap
     template <typename FunctionCall, typename... Forwards>
     auto forwardCall(v8::Local<v8::Context> context, FunctionCall const& call, Forwards&&... forwards)
     {
-        return [&]<std::size_t... Is>(std::index_sequence<Is...>) {
-            v8::Local<v8::Value> args[sizeof...(Forwards)] = {
-                v8cast<std::decay_t<std::tuple_element_t<Is, std::tuple<Forwards...>>>>(context, std::forward<Forwards>(forwards))...
-            };
-            return call(args);
-        }(std::make_index_sequence<sizeof...(forwards)>{});
+        if constexpr (sizeof...(forwards) != 0) 
+        {
+            return [&]<std::size_t... Is>(std::index_sequence<Is...>) {
+                v8::Local<v8::Value> args[sizeof...(Forwards)] = {
+                    v8cast<std::decay_t<std::tuple_element_t<Is, std::tuple<Forwards...>>>>(context, std::forward<Forwards>(forwards))...
+                };
+                return call(sizeof...(forwards), args);
+            }(std::make_index_sequence<sizeof...(forwards)>{});
+        }
+        else
+        {
+            return call(0, nullptr);
+        }
     }
 }

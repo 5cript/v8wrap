@@ -9,6 +9,12 @@ add_library(
     "v8wrap/object.cpp"
     "v8wrap/cast.cpp"
     "v8wrap/exception.cpp"
+    "v8wrap/module.cpp"
+    "v8wrap/init.cpp"
+    "v8wrap/core.cpp"
+    "v8wrap/module_loader.cpp"
+    "v8wrap/isolate.cpp"
+    "v8wrap/script.cpp"
 )
 
 find_package(Threads REQUIRED)
