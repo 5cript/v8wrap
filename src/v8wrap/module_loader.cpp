@@ -12,13 +12,18 @@ namespace v8wrap
         return v8::MaybeLocal<v8::Module>{};
     }
 //---------------------------------------------------------------------------------------------------------------------
-    v8::MaybeLocal<v8::Module> ModuleLoader::loadSynthetic(v8::Local<v8::Context> context, std::string const& path, v8::Local<v8::Value> value)
+    v8::MaybeLocal<v8::Module> ModuleLoader::loadSynthetic
+    (
+        v8::Local<v8::Context> context, 
+        std::string const& path, 
+        ExportsContainer const& exports
+    )
     {
         auto mod = *loadedModules_.insert(std::end(loadedModules_), std::make_shared <Module>(
             Module::SyntheticCreationParameters{
                 .context = context,
                 .fileName = path,
-                .exported = value,
+                .exports = exports,
                 .onModuleLoad = [this](v8::Local<v8::Context> c, std::string const& p){
                     return load(c, p);
                 }
@@ -28,10 +33,10 @@ namespace v8wrap
         return mod->getModule();
     }
 //---------------------------------------------------------------------------------------------------------------------
-    void ModuleLoader::addSynthetic(std::string const& path, v8::Local<v8::Value> value)
+    void ModuleLoader::addSynthetic(std::string const& path, ExportsContainer const& exports)
     {
         // TODO: 
-        synthetics_[path] = value;
+        synthetics_[path] = exports;
     }
 //---------------------------------------------------------------------------------------------------------------------
 }

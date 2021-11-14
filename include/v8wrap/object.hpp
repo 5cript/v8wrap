@@ -2,6 +2,7 @@
 
 #include <v8wrap/exception.hpp>
 #include <v8wrap/function.hpp>
+#include <v8wrap/value.hpp>
 #include <v8.h>
 
 namespace v8wrap
@@ -15,9 +16,11 @@ namespace v8wrap
         template <typename... Forwards>
         static std::unique_ptr<Object> instantiateClass(v8::Local<v8::Context> context, v8::Local<v8::Value> constructor, Forwards&&... fwds)
         {
+            using namespace std::string_literals;
+
             v8::EscapableHandleScope scope(context->GetIsolate());
             if (!constructor->IsFunction())
-                throw std::runtime_error("Passed argument needs to be a constructor funciton.");
+                throw std::runtime_error("Passed argument needs to be a constructor function in class instantiation; the type is: "s + typeOf(context, constructor));
 
             v8::TryCatch exc(context->GetIsolate());
             auto maybeObj = constructor->ToObject(context);

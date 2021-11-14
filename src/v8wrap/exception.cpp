@@ -3,8 +3,6 @@
 #include <fmt/format.h>
 #include <v8wrap/cast.hpp>
 
-#include <iostream>
-
 namespace v8wrap
 {    
     namespace {
@@ -69,7 +67,6 @@ namespace v8wrap
                 trace = toString(stack_trace);
             }
             const std::string formatted = fmt::format("{}:{}: {}\n{}\t\n{}{}\n{}", filenameString, linenum, exceptionString, sourceLineString, spaceOffset, squiggles, trace);
-            std::cout << formatted << "\n";
             throw JavaScriptException(formatted);
         }
     }

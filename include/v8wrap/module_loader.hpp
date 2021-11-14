@@ -1,5 +1,6 @@
 #pragma once
 
+#include <v8wrap/module_export.hpp>
 #include <v8wrap/module.hpp>
 #include <v8.h>
 
@@ -7,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <variant>
 
 namespace v8wrap
 {
@@ -14,13 +16,18 @@ namespace v8wrap
     {
     public:
         v8::MaybeLocal<v8::Module> load(v8::Local<v8::Context> context, std::string const& path);
-        void addSynthetic(std::string const& path, v8::Local<v8::Value>);
+        void addSynthetic(std::string const& path, ExportsContainer const& exports);
 
     private:
-        v8::MaybeLocal<v8::Module> loadSynthetic(v8::Local<v8::Context> context, std::string const& path, v8::Local<v8::Value> value);
+        v8::MaybeLocal<v8::Module> loadSynthetic
+        (
+            v8::Local<v8::Context> context, 
+            std::string const& path, 
+            ExportsContainer const& exports
+        );
     
     private:
         std::vector<std::shared_ptr <Module>> loadedModules_;
-        std::unordered_map<std::string, v8::Local<v8::Value>> synthetics_;
+        std::unordered_map<std::string, ExportsContainer> synthetics_;
     };
 }

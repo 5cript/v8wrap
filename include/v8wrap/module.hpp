@@ -1,12 +1,14 @@
 #pragma once
 
 #include <v8wrap/isolate.hpp>
+#include <v8wrap/module_export.hpp>
 
 #include <v8.h>
 
 #include <memory>
 #include <functional>
 #include <string>
+#include <unordered_map>
 
 namespace v8wrap
 {
@@ -33,7 +35,7 @@ namespace v8wrap
         {
             v8::Local<v8::Context> context;
             std::string fileName;
-            v8::Local<v8::Value> exported;
+            ExportsContainer exports;
             onModuleLoadFunction onModuleLoad;
         };
 
@@ -50,6 +52,7 @@ namespace v8wrap
         v8::Local<v8::Module> getModule();
         v8::Local<v8::Value> getNamespace();
         std::vector<std::string> getModuleRequests() const;
+        ExportsContainer& exports();
 
     private:
         struct Implementation;
